@@ -39,7 +39,7 @@ pipeline {
             echo Container found, removing...
             docker rm -f jenkins-demo
           )
-          docker run -d --name jenkins-demo -p 8080:8080 %IMAGE%:%TAG%
+          docker run -d --name jenkins-demo -p 8081:8080 %IMAGE%:%TAG%
         '''
       }
     }
