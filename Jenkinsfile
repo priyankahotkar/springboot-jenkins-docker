@@ -2,6 +2,7 @@ pipeline {
   agent any
 
   environment {
+    // Docker repository names must be all lowercase
     IMAGE = "priyankahotkar/jenkins-dockerize"
     TAG = "latest"
   }
@@ -21,19 +22,24 @@ pipeline {
     }
 
     stage('Build Docker Image') {
-  steps {
-    bat 'docker build -t %IMAGE%:%TAG% .'
-  }
-}
+      steps {
+        // Windows variable expansion uses %VARIABLE%
+        bat 'docker build -t %IMAGE%:%TAG% .'
+      }
+    }
 
     stage('Run Container') {
       steps {
         // Windows batch syntax for conditional logic
         bat '''
-          FOR /F "tokens=*" %%i IN ('docker ps -q -f name=jenkins-demo') DO (
+          docker ps -a -q -f name=jenkins-demo
+          if errorlevel 1 (
+            echo Container not found, skipping removal.
+          ) else (
+            echo Container found, removing...
             docker rm -f jenkins-demo
           )
-          docker run -d --name jenkins-demo -p 8080:8080 ${IMAGE}:${TAG}
+          docker run -d --name jenkins-demo -p 8080:8080 %IMAGE%:%TAG%
         '''
       }
     }
