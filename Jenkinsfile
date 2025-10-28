@@ -21,11 +21,10 @@ pipeline {
     }
 
     stage('Build Docker Image') {
-      steps {
-        // Windows command for Docker build
-        bat 'docker build -t ${IMAGE}:${TAG} .'
-      }
-    }
+  steps {
+    bat 'docker build -t %IMAGE%:%TAG% .'
+  }
+}
 
     stage('Run Container') {
       steps {
