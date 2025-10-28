@@ -1,6 +1,6 @@
 # Spring Boot + Jenkins + Docker — Demo Project
 
-**Repository:** priyankahotkar/jenkins-dockerize
+**Repository:** priyankahotkar/springboot-jenkins-docker
 
 This package contains a minimal Spring Boot application that Jenkins can build, dockerize, and run.
 It includes two workflows in the README: (A) Local Jenkins (install on machine) and (B) Jenkins in Docker.
@@ -23,11 +23,11 @@ mvn clean package
 ```
 2. Build Docker image:
 ```
-docker build -t priyankahotkar/jenkins-dockerize:latest .
+docker build -t priyankahotkar/springboot-jenkins-docker:latest .
 ```
 3. Run container:
 ```
-docker run -d --name jenkins-demo -p 8080:8080 priyankahotkar/jenkins-dockerize:latest
+docker run -d --name jenkins-demo -p 8080:8080 priyankahotkar/springboot-jenkins-docker:latest
 ```
 4. Open: http://localhost:8080/  → should return the greeting text.
 
@@ -45,7 +45,7 @@ docker run -d --name jenkins-demo -p 8080:8080 priyankahotkar/jenkins-dockerize:
 1. Start Jenkins service and open `http://localhost:8080`
 2. Create a new Pipeline job:
    - Choose **Pipeline** and set **Pipeline script from SCM**
-   - SCM: Git, Repository URL: `https://github.com/priyankahotkar/jenkins-dockerize.git`, Branch: `main`
+   - SCM: Git, Repository URL: `https://github.com/priyankahotkar/springboot-jenkins-docker.git`, Branch: `main`
 3. Ensure Jenkins has Maven & JDK configured in **Manage Jenkins → Global Tool Configuration** with names used in your jobs if needed.
 4. Give Jenkins access to Docker (Docker Desktop running on host; Jenkins runs on host so Docker CLI is accessible).
 5. Add Credentials (optional) for Docker Hub if you plan to push images: **Credentials → System → Global** → Add username/password (id: `dockerhub-creds`)
