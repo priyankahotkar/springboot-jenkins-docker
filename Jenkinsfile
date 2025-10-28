@@ -15,22 +15,25 @@ pipeline {
 
     stage('Build') {
       steps {
-        sh 'mvn clean package -DskipTests'
+        // Use 'bat' for Windows batch commands
+        bat 'mvn clean package -DskipTests'
       }
     }
 
     stage('Build Docker Image') {
       steps {
-        sh 'docker build -t ${IMAGE}:${TAG} .'
+        // Windows command for Docker build
+        bat 'docker build -t ${IMAGE}:${TAG} .'
       }
     }
 
     stage('Run Container') {
       steps {
-        sh '''
-          if [ "$(docker ps -q -f name=jenkins-demo)" ]; then
-            docker rm -f jenkins-demo || true
-          fi
+        // Windows batch syntax for conditional logic
+        bat '''
+          FOR /F "tokens=*" %%i IN ('docker ps -q -f name=jenkins-demo') DO (
+            docker rm -f jenkins-demo
+          )
           docker run -d --name jenkins-demo -p 8080:8080 ${IMAGE}:${TAG}
         '''
       }
@@ -42,9 +45,9 @@ pipeline {
       }
       steps {
         withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-          sh '''
-            echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-            docker push ${IMAGE}:${TAG}
+          bat '''
+            echo %DOCKER_PASS% | docker login -u %DOCKER_USER% --password-stdin
+            docker push %IMAGE%:%TAG%
           '''
         }
       }
